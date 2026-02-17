@@ -1,53 +1,41 @@
+// group_anagrams.cpp
+
 #include <iostream>
 #include <vector>
-#include <string>
 #include <unordered_map>
 #include <algorithm>
 
 using namespace std;
 
-class Solution {
-public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        // Map to store: {sorted_string : list_of_anagrams}
-        unordered_map<string, vector<string>> anagramMap;
+vector<vector<string>> groupAnagrams(vector<string>& strs) {
+    unordered_map<string, vector<string>> mp;
 
-        for (string s : strs) {
-            string sorted_s = s;
-            // Sort the string to use as a unique key
-            sort(sorted_s.begin(), sorted_s.end());
-            
-            // Push the original string into the vector corresponding to its sorted key
-            anagramMap[sorted_s].push_back(s);
-        }
-
-        // Prepare the result by extracting values from the map
-        vector<vector<string>> result;
-        for (auto const& [key, val] : anagramMap) {
-            result.push_back(val);
-        }
-
-        return result;
+    for (string s : strs) {
+        string key = s;
+        sort(key.begin(), key.end());  // Sort characters to form key
+        mp[key].push_back(s);
     }
-};
+
+    vector<vector<string>> result;
+    for (auto& pair : mp) {
+        result.push_back(pair.second);
+    }
+
+    return result;
+}
 
 int main() {
-    Solution sol;
-    
-    // Test input
     vector<string> input = {"eat", "tea", "tan", "ate", "nat", "bat"};
-    
-    // Get grouped anagrams
-    vector<vector<string>> grouped = sol.groupAnagrams(input);
 
-    // Print the results
-    cout << "Grouped Anagrams:" << endl;
+    vector<vector<string>> grouped = groupAnagrams(input);
+
+    cout << "Grouped Anagrams:\n";
     for (const auto& group : grouped) {
         cout << "[ ";
-        for (const string& word : group) {
+        for (const auto& word : group) {
             cout << word << " ";
         }
-        cout << "]" << endl;
+        cout << "]\n";
     }
 
     return 0;
